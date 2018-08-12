@@ -1,0 +1,68 @@
+version: '2.0'
+
+services:
+
+  netflix-eureka-naming-server:
+    container_name: netflix-eureka-naming-server
+    build: ./netflix-eureka-naming-server
+    volumes:
+            - '/usr/local/repo:/root/.m2'
+    ports:
+         - "8761:8761"
+    restart:
+      unless-stopped
+    networks:
+         - micros
+  zuul-api-gateway:
+    container_name: zuul-api-gateway
+    build: ./zuul-api-gateway
+    volumes:
+            - '/usr/local/repo:/root/.m2'
+    ports:
+         - "8765:8765"
+    restart:
+      unless-stopped
+    networks:
+         - micros 
+    depends_on:
+         - netflix-eureka-naming-server
+    links:
+          - netflix-eureka-naming-server
+    environment:
+        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE : http://netflix-eureka-naming-server:8761/eureka
+  currency-exchange-service:
+    container_name: currency-exchange-service   
+    build: ./currency-exchange-service
+    volumes:
+            - '/usr/local/repo:/root/.m2'
+    ports:
+         - "8000"
+    restart:
+      unless-stopped
+    networks:
+         - micros
+    depends_on:
+         - netflix-eureka-naming-server
+    links:
+          - netflix-eureka-naming-server
+    environment:
+        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE : http://netflix-eureka-naming-server:8761/eureka 
+  currency-conversion-service:
+    container_name: currency-conversion-service
+    build: ./currency-conversion-service
+    volumes:
+            - '/usr/local/repo:/root/.m2'
+    ports:
+         - "8100"
+    restart:
+      unless-stopped
+    networks:
+         - micros
+    depends_on:
+         - netflix-eureka-naming-server
+    links:
+          - netflix-eureka-naming-server
+    environment:
+        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE : http://netflix-eureka-naming-server:8761/eureka
+networks:
+ micros:
