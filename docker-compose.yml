@@ -5,6 +5,7 @@ services:
   netflix-eureka-naming-server:
     container_name: netflix-eureka-naming-server
     build: ./netflix-eureka-naming-server
+    image: joy1987/netflix-eureka-naming-server
     volumes:
             - '/usr/local/repo:/root/.m2'
     ports:
@@ -16,6 +17,7 @@ services:
   currency-exchange-service:
     container_name: currency-exchange-service
     build: ./currency-exchange-service
+    image: joy1987/currency-exchange-service
     volumes:
             - '/usr/local/repo:/root/.m2'
     ports:
@@ -29,6 +31,7 @@ services:
     links:
           - netflix-eureka-naming-server
   currency-conversion-service:
+    image: joy1987/currency-conversion-service
     container_name: currency-conversion-service
     build: ./currency-conversion-service
     volumes:
@@ -44,6 +47,7 @@ services:
     links:
           - netflix-eureka-naming-server
   zuul-api-gateway:
+    image: joy1987/zuul-api-gateway
     container_name: zuul-api-gateway
     build: ./zuul-api-gateway
     volumes:
