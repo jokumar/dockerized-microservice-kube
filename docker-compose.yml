@@ -58,6 +58,7 @@ services:
          - netflix-eureka-naming-server
     links:
           - netflix-eureka-naming-server
-
+    environment:
+        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE : http://netflix-eureka-naming-server:8761/eureka
 networks:
  micros:
